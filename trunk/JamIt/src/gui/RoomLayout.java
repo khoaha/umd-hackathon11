@@ -42,6 +42,7 @@ class LayoutPanel extends JPanel {
 	int mouseX2 = 0;
 	int mouseY2 = 0;
 	
+	// TODO: Right click expands the room, left click removes parts of the room
 	public LayoutPanel() {
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed (MouseEvent e) { // Get the first corner for a selection
@@ -70,8 +71,21 @@ class LayoutPanel extends JPanel {
 				}
 				if (mouseY < mouseY2) {
 					top = mouseY;
+					bottom = mouseY2;
+				} else {
+					top = mouseY2;
 					bottom = mouseY;
 				}
+				
+				for (int x = left; x < right; x++) {
+					for (int y = top; y < bottom; y++) {
+						if (e.getButton() == MouseEvent.BUTTON1)
+							room[x][y] = true;
+						if (e.getButton() == MouseEvent.BUTTON3)
+							room[x][y] = false;
+					}
+				}
+				repaint();
 			}
 		});
 		
@@ -139,7 +153,15 @@ class LayoutPanel extends JPanel {
 	}
 	
 	public void drawAreas(Graphics b) {
-		
+		for (int x = 0; x < room.length; x++) {
+			for (int y = 0; y < room[0].length; y++) {
+				if (room[x][y]) {
+					b.setColor(Color.BLUE);
+					b.fillRect(52+x*15, 52+y*15, 15, 15);
+					b.setColor(Color.BLACK);
+				}
+			}
+		}
 	}
 	
 	public void drawGrid(Graphics b) {
