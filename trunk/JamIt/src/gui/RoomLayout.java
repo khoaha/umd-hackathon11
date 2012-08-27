@@ -1,5 +1,3 @@
-package jam;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -35,16 +33,26 @@ class LayoutPanel extends JPanel {
 	private int xSize = 1280;
 	private int ySize = 800;
 	
+	bool room[][] = new bool[32][32];
+	int mouseX = 0;
+	int mouseY = 0;
 	
 	public LayoutPanel() {
-		addMouseListener(new MouseAdapter() {});
+		addMouseListener(new MouseAdapter() {
+			void mouseClicked (MouseEvent e) {
+				mouseX = (e.getX() - 50)/15;
+				mouseY = (e.getY() - 50)/15;
+			}
+		});
 		addMouseMotionListener(new MouseAdapter() {});
 		
-		new Thread() {	
-			public void run() {
-				gameUpdate();
-			}
-		}.start();
+		repaint();
+		
+//		new Thread() {	
+//			public void run() {
+//				gameUpdate();
+//			}
+//		}.start();
 	}
 	
 
@@ -98,5 +106,6 @@ class LayoutPanel extends JPanel {
 				b.fillOval(50+x*15, 50+y*15, 3, 3);
 			}
 		}
+		b.drawOval(50+mouseX*15, 50+mouseY*15, 4, 4);
 	}
 }
