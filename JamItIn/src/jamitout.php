@@ -31,8 +31,8 @@ while($row = mysql_fetch_array($result)) {
       }
     }
   }
-  $retnumbers = array("numbers" => '"'.implode(",",$retnumbers).'"');
-  print(json_encode($retnumbers));
+  $retnumbers ='"'.implode(",",$retnumbers).'"';
+  print($retnumbers);
 }
 mysql_close($con);
 
