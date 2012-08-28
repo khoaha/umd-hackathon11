@@ -34,7 +34,8 @@ public class MainActivity extends Activity {
     }
 
     private void connectToServer() {
-		
+		ContactLookerActivity contacts = new ContactLookerActivity();
+		contacts.getData(getContentResolver());
 		
 	}
     
@@ -42,8 +43,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Socket doInBackground(Integer... arg0) {
-			Socket temp = new Socket();
-			//temp.connect()
+			
 			return null;
 		}
     	
