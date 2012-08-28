@@ -22,7 +22,7 @@ public class DataInterface {
 	/**
 	 * Connect to the provided url with nameValuePairs and return the resulting JSONArray.
 	 */
-	public static JSONArray execute(String url, ArrayList<NameValuePair> nameValuePairs) throws Exception {
+	public static String execute(String url, ArrayList<NameValuePair> nameValuePairs) throws Exception {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -41,7 +41,7 @@ public class DataInterface {
 
 		// populate the data
 		if (result.length() > 0)
-			return new JSONArray(result);
+			return result;
 		else
 			return null;
 	}
