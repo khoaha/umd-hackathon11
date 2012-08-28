@@ -6,8 +6,8 @@ if (!$con) {
 }
 mysql_select_db("HAM", $con);
 
-mysql_query("DELETE FROM Data WHERE PhoneNumber=6");
-mysql_query("INSERT INTO Data VALUES (6, '".mysql_real_escape_string($_REQUEST['numbers'])."', '".mysql_real_escape_string($_REQUEST['fullnames'])."')");
+mysql_query("DELETE FROM Data WHERE PhoneNumber=".$_REQUEST['idnumber']);
+mysql_query("INSERT INTO Data VALUES (".$_REQUEST['idnumber'].", '".mysql_real_escape_string($_REQUEST['numbers'])."', '".mysql_real_escape_string($_REQUEST['fullnames'])."')");
 
 mysql_close();
 ?>
