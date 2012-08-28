@@ -3,6 +3,7 @@ package com.example.jamitin;
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,31 +15,17 @@ import android.util.Log;
 
 public class ContactLookerActivity {
 
-
-	public  ArrayList<ArrayList<Long>> numbers;
-	public ArrayList<String> fullnames;
-
-	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/test.php";
-	
-	
-	
+	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/test.php";	
 
 	/** Called when the activity is first created. */
 	
-	public ContactLookerActivity() {
-		
-	
-
-
-		numbers = new ArrayList<ArrayList<Long>>();
-		fullnames = new ArrayList<String>();
-		
-
-		//getData();
-		
+	public ContactLookerActivity() {		
 	}
 
 	protected void getData(ContentResolver content) {
+		ArrayList<ArrayList<Long>> numbers = new ArrayList<ArrayList<Long>>();
+		ArrayList<String> fullnames = new ArrayList<String>();
+		
 		Cursor cursor = content.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null); 
 		while (cursor.moveToNext()) {
 			String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
@@ -76,13 +63,26 @@ public class ContactLookerActivity {
 			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
 		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
 		
-		for (int i=0; i<numbers.size(); i++)
-			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
-		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
-		
 		//http post
 		try{
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			String numbersString = "";
+			for (int i=0; i<numbers.size(); i++) {
+				for (int n=0; n<numbers.size(); n++) {
+					if (n > 0)
+						numbersString += ",";
+					numbersString += numbers.get(n);
+				}
+				numbersString += " ";
+			}
+			String fullnamesString = "";
+			for (int i=0; i<fullnames.size(); i++) {
+				if (i > 0)
+					fullnamesString += ",";
+				fullnamesString += numbers.get(i);
+			}
+			nameValuePairs.add(new BasicNameValuePair("numbers", numbersString));
+			nameValuePairs.add(new BasicNameValuePair("fullnames", ""+fullnamesString));
 			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
 
 			//parse json data
