@@ -5,31 +5,43 @@ if (!$con) {
 }
 
 mysql_select_db("HAM", $con);
-// gets person requesting
 $result = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$_REQUEST['idnumber']);
-	$output = array();
-
 while($row = mysql_fetch_array($result)) {
-	// gets contacts' numbers
-	$numbers = explode(" ",$row['Numbers']);
-	
+  $numbers = explode(" ",$row['Numbers']);
+  $contacts = explode(",",$row['Names']); // List of all the users friends
 
-	$m = explode(",", $numbers); //separate numbers
-	foreach ($m as $number) {
-		$q = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$m); // gets friend row with number
-		while($r = mysql_fetch_array($q)) {
-			$names = explode(",",$r['Names']); //get friend's names list
-			$targets = explode(" ",$r['Numbers']); //get friend's names' corresponding number lists
-			for ($i=0; $i<count($names); $i++) {
-			  if (strcmp(tolower($names[$i]), tolower($_REQUEST['fullname']))) { //checks if current name matches input
-			    array_push($output, $targets[$i]); //TODO: add all numbers
-			  }
-			}
-		}
+  for ($x=0; $x < count($numbers); $x++)
+    //$contacts = explode(",",$numbers[$x]);
+    explode(",",$numbers[$x]);
+
+
+  $retnumbers = array();
+  
+  for ($i=0; $i < count($contacts); $i++) { // I think we need count($array,1) because our arrays might be multidimensional
+    for ($j=0; $j < count($numbers[$i],1); $j++) {
+
+      $foafs = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$numbers[$i][$j]);
+      while ($row = mysql_fetch_array($foafs)) {
+	$foafcont = explode(",", $row['Names']);
+	$foafnumb = explode(" ",$row['Numbers']);
+
+	//for ($x=0; $x < count($numbers); $x++)
+	//  $foafnumb[$l] = explode(",",$foafnumb[$l]);
+
+	for ($k = 0; $k < count($foafcont); $k++) {
+	  for ($l=0; $l < count($numbers[$k],1); $l++) {
+	    $foafnumb[$l] = explode(",",$foafnumb[$l]);
+	    if (strtolower($_REQUEST['fullname']) == strtolower($foafcont[$k]))
+	      if (!in_array($foafnumb[$k][$l],$retnumbers))
+		array_push($retnumbers, $foafnumb[$k][$l]);
+	  }
 	}
+      }
+    }
+  }
+  $retnumbers = implode(",",$retnumbers);
+  print($retnumbers);
 }
-print($output);
-
 mysql_close($con);
 
 ?>
