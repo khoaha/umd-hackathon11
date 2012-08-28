@@ -105,7 +105,7 @@ public class ContactLookerActivity {
 			nameValuePairs.add(new BasicNameValuePair("idnumber", tMgr.getLine1Number().replaceAll("\\D", "")));
 			nameValuePairs.add(new BasicNameValuePair("numbers", numbersString));
 			nameValuePairs.add(new BasicNameValuePair("fullnames", ""+fullnamesString));
-			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
+			DataInterface.execute(phpURL, nameValuePairs);
 
 		}catch(Exception e){
 			Log.e("log_tag", "Error in http connection ", e);
