@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class ContactLookerActivity {
@@ -22,7 +23,7 @@ public class ContactLookerActivity {
 	public ContactLookerActivity() {		
 	}
 
-	protected void getData(ContentResolver content) {
+	protected void getData(ContentResolver content, TelephonyManager tMgr) {
 		ArrayList<ArrayList<Long>> numbers = new ArrayList<ArrayList<Long>>();
 		ArrayList<String> fullnames = new ArrayList<String>();
 		
@@ -66,7 +67,7 @@ public class ContactLookerActivity {
 			if (a.size() != b.size())
 				continue;
 			for (int n=0; n<a.size(); n++) {
-				if (a.get(n) != b.get(n)) {
+				if (!a.get(n).equals(b.get(n))) {
 					flag = true;
 					break;
 				}
@@ -101,6 +102,7 @@ public class ContactLookerActivity {
 					fullnamesString += ",";
 				fullnamesString += fullnames.get(i);
 			}
+			nameValuePairs.add(new BasicNameValuePair("idnumber", tMgr.getLine1Number().replaceAll("\\D", "")));
 			nameValuePairs.add(new BasicNameValuePair("numbers", numbersString));
 			nameValuePairs.add(new BasicNameValuePair("fullnames", ""+fullnamesString));
 			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
