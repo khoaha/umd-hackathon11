@@ -15,7 +15,7 @@ import android.util.Log;
 
 public class ContactLookerActivity {
 
-	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/test.php";	
+	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/jamitin.php";	
 
 	/** Called when the activity is first created. */
 	
@@ -68,10 +68,11 @@ public class ContactLookerActivity {
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			String numbersString = "";
 			for (int i=0; i<numbers.size(); i++) {
-				for (int n=0; n<numbers.size(); n++) {
+				ArrayList<Long> q = numbers.get(i);
+				for (int n=0; n<q.size(); n++) {
 					if (n > 0)
 						numbersString += ",";
-					numbersString += numbers.get(n);
+					numbersString += q.get(n);
 				}
 				numbersString += " ";
 			}
@@ -79,26 +80,29 @@ public class ContactLookerActivity {
 			for (int i=0; i<fullnames.size(); i++) {
 				if (i > 0)
 					fullnamesString += ",";
-				fullnamesString += numbers.get(i);
+				fullnamesString += fullnames.get(i);
 			}
 			nameValuePairs.add(new BasicNameValuePair("numbers", numbersString));
 			nameValuePairs.add(new BasicNameValuePair("fullnames", ""+fullnamesString));
 			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
 
 			//parse json data
-			try{
+			/*try{
 				// populate the orders
 				for(int i=0; i<jArray.length(); i++) {
 					JSONObject json_data = jArray.getJSONObject(i);
 					String o = json_data.getString("output");
 					System.out.println(o);
-				}
+					}
+				
+				
 			}catch(JSONException e2){
-				Log.e("log_tag", "Error parsing data "+e2.toString());
-			}
+				Log.e("log_tag", "Error parsing data "+e2.toString(), e2);
+			}*/
 		}catch(Exception e){
-			Log.e("log_tag", "Error in http connection "+e.toString());
+			Log.e("log_tag", "Error in http connection ", e);
 		}
+		Log.d("Tag", "Done Json");
 	}
 	
 }
