@@ -2,14 +2,20 @@ package com.example.jamitin;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 public class ContactLookerActivity {
 
+	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/test.php";
+	
 	protected ArrayList<ArrayList<Long>> numbers;
 	protected ArrayList<String> fullnames;
 	
@@ -25,8 +31,30 @@ public class ContactLookerActivity {
 		fullnames = new ArrayList<String>();
 		
 
+		//getData();
+		for (int i=0; i<numbers.size(); i++)
+			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
+		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
 		
-		
+		//http post
+		try{
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
+
+			//parse json data
+			try{
+				// populate the orders
+				for(int i=0; i<jArray.length(); i++) {
+					JSONObject json_data = jArray.getJSONObject(i);
+					String o = json_data.getString("output");
+					System.out.println(o);
+				}
+			}catch(JSONException e){
+				Log.e("log_tag", "Error parsing data "+e.toString());
+			}
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
 	}
 
 	protected void getData(ContentResolver content) {
