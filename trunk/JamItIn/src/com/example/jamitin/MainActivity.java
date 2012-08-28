@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -45,6 +49,8 @@ public class MainActivity extends Activity {
 	private Socket sockToSql;
 	private ListView listofcontacts;
 	//private URL serverURL
+	
+	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/jamitout.php";	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -160,8 +166,14 @@ public class MainActivity extends Activity {
 	
 	
     protected void requestContact(String s) {
-		// TODO Auto-generated method stub
-		
+    	try {
+    	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    	nameValuePairs.add(new BasicNameValuePair("idnumber", ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number().replaceAll("\\D", "")));
+		nameValuePairs.add(new BasicNameValuePair("fullname", s.replaceAll("\\s", "")));
+		JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
+    	} catch(Exception e){
+			Log.e("log_tag", "Error in http connection ", e);
+		}
 	}
     
     protected void callContact(String numberString){
