@@ -14,10 +14,13 @@ import android.util.Log;
 
 public class ContactLookerActivity {
 
+
+	public  ArrayList<ArrayList<Long>> numbers;
+	public ArrayList<String> fullnames;
+
 	protected final String phpURL = "http://zaphodbeeblebrox.student.umd.edu/test.php";
 	
-	protected ArrayList<ArrayList<Long>> numbers;
-	protected ArrayList<String> fullnames;
+	
 	
 
 	/** Called when the activity is first created. */
@@ -32,29 +35,7 @@ public class ContactLookerActivity {
 		
 
 		//getData();
-		for (int i=0; i<numbers.size(); i++)
-			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
-		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
 		
-		//http post
-		try{
-			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
-
-			//parse json data
-			try{
-				// populate the orders
-				for(int i=0; i<jArray.length(); i++) {
-					JSONObject json_data = jArray.getJSONObject(i);
-					String o = json_data.getString("output");
-					System.out.println(o);
-				}
-			}catch(JSONException e){
-				Log.e("log_tag", "Error parsing data "+e.toString());
-			}
-		}catch(Exception e){
-			Log.e("log_tag", "Error in http connection "+e.toString());
-		}
 	}
 
 	protected void getData(ContentResolver content) {
@@ -94,6 +75,30 @@ public class ContactLookerActivity {
 		for (int i=0; i<numbers.size(); i++)
 			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
 		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
+		
+		for (int i=0; i<numbers.size(); i++)
+			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
+		System.out.println("Done! "+fullnames.size()+" "+numbers.size());
+		
+		//http post
+		try{
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
+
+			//parse json data
+			try{
+				// populate the orders
+				for(int i=0; i<jArray.length(); i++) {
+					JSONObject json_data = jArray.getJSONObject(i);
+					String o = json_data.getString("output");
+					System.out.println(o);
+				}
+			}catch(JSONException e2){
+				Log.e("log_tag", "Error parsing data "+e2.toString());
+			}
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
 	}
 	
 }

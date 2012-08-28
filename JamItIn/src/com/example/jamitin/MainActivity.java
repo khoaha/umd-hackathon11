@@ -34,16 +34,20 @@ public class MainActivity extends Activity {
     }
 
     private void connectToServer() {
-		ContactLookerActivity contacts = new ContactLookerActivity();
-		contacts.getData(getContentResolver());
 		
+		new ConnectTask().execute();
 	}
     
-    private class ConnectTask extends AsyncTask<Integer, Integer, Socket>{
+    private class ConnectTask extends AsyncTask<String, Integer, Integer>{
+
+		public ConnectTask() {
+			// TODO Auto-generated constructor stub
+		}
 
 		@Override
-		protected Socket doInBackground(Integer... arg0) {
-			
+		protected Integer doInBackground(String... arg0) {
+			ContactLookerActivity contacts = new ContactLookerActivity();
+			contacts.getData(getContentResolver());
 			return null;
 		}
     	
@@ -74,10 +78,4 @@ public class MainActivity extends Activity {
     		 }
     }
     	
-
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
 }
