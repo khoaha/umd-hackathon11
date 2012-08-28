@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 import android.net.Uri;
@@ -171,6 +173,30 @@ public class MainActivity extends Activity {
     	nameValuePairs.add(new BasicNameValuePair("idnumber", ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number().replaceAll("\\D", "")));
 		nameValuePairs.add(new BasicNameValuePair("fullname", s.replaceAll("\\s", "")));
 		JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
+		//parse json data
+		try{
+			// populate the orders
+			for(int i=0; i<jArray.length(); i++) {
+				JSONObject json_data = jArray.getJSONObject(i);
+				String o = json_data.getString("numbers");
+				
+				
+				String[] numStrings = o.split(",");
+				for(int j = 0; j < numStrings.length; j++){
+					numStrings[j] = numStrings[j].substring(0, 3) + "-" + numStrings[j].substring(3, 6) + "-" + numStrings[j].substring(6);
+				}
+			
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+						android.R.layout.simple_list_item_1, android.R.id.text1, numStrings);
+				
+				listofcontacts.setAdapter(adapter);
+			
+			}
+			
+			
+		}catch(JSONException e2){
+			Log.e("log_tag", "Error parsing data "+e2.toString(), e2);
+		}
     	} catch(Exception e){
 			Log.e("log_tag", "Error in http connection ", e);
 		}
