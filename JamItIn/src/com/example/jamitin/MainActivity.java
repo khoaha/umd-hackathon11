@@ -41,6 +41,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,6 +121,11 @@ public class MainActivity extends Activity {
 
 		});
 	}
+	
+	public void contactPressed(View v){
+		
+		addContact(requestName.getText().toString(), (((Button)((LinearLayout) v.getParent()).getChildAt(0)).getText()).toString());
+	}
 
 	protected void addContact(String name, String number) {
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
@@ -148,11 +154,16 @@ public class MainActivity extends Activity {
 		catch (RemoteException e)
 		{ 
 			// error
+
+			Toast.makeText(this, "Contact not added", Toast.LENGTH_SHORT).show();
 		}
 		catch (OperationApplicationException e) 
 		{
 			// error
+			Toast.makeText(this, "Contact not added", Toast.LENGTH_SHORT).show();
 		}       
+
+		Toast.makeText(this, "Contact added", Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -227,6 +238,10 @@ public class MainActivity extends Activity {
 
 	public void itemClicked(View v){
 		Log.e("Main", "item clicked");
+		String number = String.valueOf((String) ((TextView) v).getText());
+		Log.d("MainActivity", number);
+		number.trim();
+		callContact(number);
 	}
 	
 	protected void callContact(String numberString){
