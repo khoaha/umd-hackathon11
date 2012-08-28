@@ -33,7 +33,6 @@ public class ContactLookerActivity {
 			String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 			if (hasPhone.equals("1")){
 				while (names.moveToNext()) {
-					//String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 					String firstField = names.getString(names.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
 					String secondField = names.getString(names.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
 					if(firstField == null)
@@ -58,6 +57,15 @@ public class ContactLookerActivity {
 			names.close();
 		}
 		cursor.close();
+		
+		// delete dupes
+		for (int i=1; i<numbers.size(); i++) {
+			if (numbers.get(i) == numbers.get(i-1)) {
+				numbers.remove(i);
+				fullnames.remove(i);
+				i--;
+			}
+		}
 		
 		for (int i=0; i<numbers.size(); i++)
 			System.out.println(fullnames.get(i)+" => "+numbers.get(i));
