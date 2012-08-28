@@ -5,35 +5,31 @@ if (!$con) {
 }
 
 mysql_select_db("HAM", $con);
+// gets person requesting
 $result = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$_REQUEST['idnumber']);
 while($row = mysql_fetch_array($result)) {
-  $numbers = explode(" ",$row['Numbers']);
-  $contacts = explode(",",$row['Names']); // List of all the users friends
+	// gets contacts' numbers
+	$numbers = explode(" ",$row['Numbers']);
+	
+	$output = array();
 
-
-  $retnumbers = array();
-  
-  for ($i=0; $i < count($contacts); $i++) { // I think we need count($array,1) because our arrays might be multidimensional
-    for ($j=0; $j < count($numbers[$i],1); $j++) {
-      $numbers[$i] = explode(",",$numbers[$i]);
-      $foafs = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$numbers[$i][$j]);
-      while ($row = mysql_fetch_array($foafs)) {
-	$foafcont = explode(",", $row['Names']);
-	$foafnumb = explode(" ",$row['Numbers']);
-	for ($k = 0; $k < count($foafcont); $k++) {
-	  for ($l=0; $l < count($numbers[$k],1); $l++) {
-	    $foafnumb[$k] = explode(",",$foafnumb[$k]);
-	    if (strtolower($_REQUEST['fullname']) == strtolower($foafcont[$k]))
-	      if (!in_array($foafnumb[$k][$l],$retnumbers))
-		$array_push($retnumbers, $foafnumb[$k][$l]);
-	  }
-	}
-      }
-    }
-  }
-  $retnumbers = array("numbers" => '"'.implode(",",$retnumbers).'"');
-  print(json_encode($retnumbers));
+	$m = explode(",", $numbers); //separate numbers
+	for ($m as $number)
+		$q = mysql_query("SELECT * FROM Data WHERE PhoneNumber=".$m); // gets friend row with number
+		while($r = mysql_fetch_array($q)) {
+			$names = explode(",",$r['Names']); //get friend's names list
+			$targets = explode(" ",$r['Numbers']); //get friend's names' corresponding number lists
+			for ($i=0; $i<count($names); $i++) {
+				if strcmp(tolower($names[$i]), tolower($_REQUEST['fullname'])) { //checks if current name matches input
+					array_push($output, array('numbers' => $targets[$i])); //TODO: add all numbers
+				}
+			}
+		}
 }
+  
+}
+print(json_encode($output));
+
 mysql_close($con);
 
 ?>
