@@ -60,7 +60,18 @@ public class ContactLookerActivity {
 		
 		// delete dupes
 		for (int i=1; i<numbers.size(); i++) {
-			if (numbers.get(i) == numbers.get(i-1)) {
+			boolean flag = false;
+			ArrayList<Long> a = numbers.get(i-1);
+			ArrayList<Long> b = numbers.get(i);
+			if (a.size() != b.size())
+				continue;
+			for (int n=0; n<a.size(); n++) {
+				if (a.get(n) != b.get(n)) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
 				numbers.remove(i);
 				fullnames.remove(i);
 				i--;
