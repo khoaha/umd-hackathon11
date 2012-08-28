@@ -107,19 +107,6 @@ public class ContactLookerActivity {
 			nameValuePairs.add(new BasicNameValuePair("fullnames", ""+fullnamesString));
 			JSONArray jArray = DataInterface.execute(phpURL, nameValuePairs);
 
-			//parse json data
-			/*try{
-				// populate the orders
-				for(int i=0; i<jArray.length(); i++) {
-					JSONObject json_data = jArray.getJSONObject(i);
-					String o = json_data.getString("output");
-					System.out.println(o);
-					}
-				
-				
-			}catch(JSONException e2){
-				Log.e("log_tag", "Error parsing data "+e2.toString(), e2);
-			}*/
 		}catch(Exception e){
 			Log.e("log_tag", "Error in http connection ", e);
 		}
