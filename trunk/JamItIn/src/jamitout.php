@@ -11,8 +11,9 @@ while($row = mysql_fetch_array($result)) {
   $contacts = explode(",",$row['Names']); // List of all the users friends
 
   for ($x=0; $x < count($numbers); $x++)
-    //$contacts = explode(",",$numbers[$x]);
-    echo explode(",",$numbers[$x]);
+    $numbers[$x] = explode(",",$numbers[$x]);
+  //print_r($numbers);
+  //print_r($contacts);
 
 
   $retnumbers = array();
@@ -29,11 +30,12 @@ while($row = mysql_fetch_array($result)) {
 	//  $foafnumb[$l] = explode(",",$foafnumb[$l]);
 
 	for ($k = 0; $k < count($foafcont); $k++) {
-	  for ($l=0; $l < count($numbers[$k],1); $l++) {
-	    $foafnumb[$l] = explode(",",$foafnumb[$l]);
-	    if (strtolower($_REQUEST['fullname']) == strtolower($foafcont[$k]))
+	  if (strcmp(strtolower($_REQUEST['fullname']), strtolower($foafcont[$k])) == 0) {
+            $foafnumb[$k] = explode(",",$foafnumb[$k]);
+            for ($l=0; $l < count($foafnumb[$k]); $l++) {
 	      if (!in_array($foafnumb[$k][$l],$retnumbers))
-		array_push($retnumbers, $foafnumb[$k][$l]);
+	        array_push($retnumbers, $foafnumb[$k][$l]);
+	    }
 	  }
 	}
       }
