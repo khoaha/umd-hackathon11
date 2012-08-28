@@ -6,9 +6,11 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,6 +66,13 @@ public class MainActivity extends Activity {
 		
 	}
     
+    protected void callContact(String numberString){
+    	if (!numberString.equals("")) {
+    		  Uri number = Uri.parse("tel:" + numberString);
+    		  Intent dial = new Intent(Intent.ACTION_CALL, number);
+    		  startActivity(dial);
+    		 }
+    }
     	
 
 	@Override
