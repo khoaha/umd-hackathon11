@@ -12,7 +12,7 @@ while($row = mysql_fetch_array($result)) {
 
   for ($x=0; $x < count($numbers); $x++)
     //$contacts = explode(",",$numbers[$x]);
-    explode(",",$numbers[$x]);
+    echo explode(",",$numbers[$x]);
 
 
   $retnumbers = array();
